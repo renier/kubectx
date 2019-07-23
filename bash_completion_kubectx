@@ -1,0 +1,11 @@
+#!/bin/bash
+
+function _kubectx_bash_autocomplete() {
+    local cur
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+
+    COMPREPLY=($(compgen -W "$(kubectx compgen)" -- $cur))
+}
+
+complete -F _kubectx_bash_autocomplete kubectx
