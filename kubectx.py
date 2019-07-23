@@ -24,6 +24,16 @@ PATHS = [
 
 MAIN_CONFIG = '{}/.kube/config'.format(os.environ['HOME'])
 
+DEFAULT_CONFIG = """---
+apiVersion: v1
+clusters: []
+contexts: []
+current-context:
+kind: Config
+preferences: {}
+users: []
+"""
+
 
 def find_files(pattern, path):
     result = []
@@ -35,6 +45,19 @@ def find_files(pattern, path):
     return result
 
 
+def get_main_doc():
+    if not os.path.exists(os.path.dirname(MAIN_CONFIG)):
+        os.makedirs(os.path.dirname(MAIN_CONFIG))
+
+    if os.path.exists(MAIN_CONFIG):
+        f = open(MAIN_CONFIG, 'r')
+        main_doc = yaml.unsafe_load(f.read())
+        f.close()
+        return main_doc
+    else:
+        return yaml.unsafe_load(DEFAULT_CONFIG)
+
+
 def update():
     # Find all yaml files
     result = []
@@ -42,7 +65,7 @@ def update():
         result += find_files('*.yml', path)
 
     suspects = ['clusters', 'contexts', 'users']
-    main_doc = yaml.unsafe_load(open(MAIN_CONFIG, 'r').read())
+    main_doc = get_main_doc()
     for var in suspects:
         table = locals()[var] = {}
         for item in main_doc[var]:
@@ -81,8 +104,7 @@ def update():
 
 
 def switch(newctx):
-    with open(MAIN_CONFIG, 'r') as f:
-        main_doc = yaml.unsafe_load(f.read())
+    main_doc = get_main_doc()
 
     found = False
     for context in main_doc['contexts']:
@@ -92,7 +114,8 @@ def switch(newctx):
 
     if not found:
         print("context not found. please download it and refresh the cache.")
-        print("e.g. ibmcloud ks cluster-config {} && {}".format(newctx, os.path.basename(sys.argv[0])))
+        print("e.g. ibmcloud ks cluster-config {} && {}".format(newctx,
+                                                                os.path.basename(sys.argv[0])))
         return 1
 
     main_doc['current-context'] = newctx
@@ -105,11 +128,10 @@ def switch(newctx):
 
 
 def list():
-    with open(MAIN_CONFIG, 'r') as f:
-        main_doc = yaml.unsafe_load(f.read())
-        contexts = [c['name'] for c in main_doc['contexts']]
-        print(" ".join(contexts))
-    
+    main_doc = get_main_doc()
+    contexts = [c['name'] for c in main_doc['contexts']]
+    print(" ".join(contexts))
+
     return 0
 
 
