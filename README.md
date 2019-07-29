@@ -5,7 +5,7 @@ A CLI tool to manage kubernetes contexts alongside IBM Cloud kubernetes contexts
 # installing
 
 ```bash
-pip3 install -e "git+ssh://github.com/renier/kubectx#egg=kubectx"
+pip3 install -e "git+https://github.com/renier/kubectx#egg=kubectx"
 ```
 
 # using
