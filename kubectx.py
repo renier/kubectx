@@ -99,7 +99,7 @@ def update():
     with open(MAIN_CONFIG, 'w') as f:
         f.write(yaml.dump(main_doc))
 
-    print("Updated %s" % MAIN_CONFIG)
+    print("Refreshed kube contexts. Current context is %s" % main_doc["current-context"])
     return 0
 
 
