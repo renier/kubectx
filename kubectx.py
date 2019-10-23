@@ -86,7 +86,14 @@ def update():
 
                 for var in suspects:
                     table = locals()[var]
-                    table[doc[var][0]['name']] = doc[var][0]
+                    entry = doc[var][0]
+                    name = entry['name']
+                    if var == 'contexts':
+                        row = table.get(name)
+                        if row and row['context'].get('namespace'):
+                            entry['context']['namespace'] = row['context']['namespace']
+
+                    table[name] = entry
 
             except yaml.YAMLError as exc:
                 print(exc)
