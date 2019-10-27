@@ -4,20 +4,33 @@ A CLI tool to manage kubernetes contexts alongside IBM Cloud kubernetes contexts
 
 # installing
 
-```bash
-pip3 install -e "git+https://github.com/renier/kubectx#egg=kubectx"
+```
+$ wget https://raw.githubusercontent.com/renier/kubectx/master/kubectx.sh
+$ chmod +x kubectx.sh
+$ cp kubectx.sh /usr/local/bin/kubectx
 ```
 
 # using
 
-To cache all existing IBM Cloud Kubernetes contexts:
+To cache all existing IBM Cloud Kubernetes configs:
 ```
-$ kubectx
+$ source kubectx > /dev/null
 ```
+You should also add this command to your `~/.bash_profile` (or `~/.bashrc` on Unix/Linux).
 
 That's it. To switch to any of the cached contexts:
 ```
 $ kubectx <context name>
+```
+
+It also supports setting the namespace:
+```
+$ kubectx <context name> <namespace>
+```
+
+To see the context table:
+```
+kubectx
 ```
 
 ## Bash completion
@@ -34,11 +47,11 @@ $ source $BASEDIR/kubectx # to get it going on the current terminal
 
 Now try it: `kubectx <TAB><TAB>`. 🎉
 
-## Installing a context
+## Installing a new context
 
 To install a brand new IBM Cloud Kubernetes context (assuming you are already logged in to IBM Cloud):
 ```
 $ ibmcloud ks cluster-config <context name> # requires the container-service ibmcloud plugin
-$ kubectx # To cache it
+$ source kubectx # To cache it
 $ kubectx <context name> # To set it
 ```
