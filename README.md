@@ -1,6 +1,6 @@
 # kubectx
 
-A CLI tool to manage kubernetes contexts alongside IBM Cloud kubernetes contexts
+A CLI wrapper around `kubectl config` to manage kubernetes contexts alongside IBM Cloud kubernetes contexts
 
 # installing
 
