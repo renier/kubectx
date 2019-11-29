@@ -7,7 +7,7 @@ fi
 
 # set KUBECONFIG paths
 KUBECONFIG=~/.kube/config
-configs_array=($(find ~/.bluemix/plugins/container-service -name "*.yml"))
+configs_array=($(find ~/.bluemix/plugins/container-service -name "*.yml" | xargs ls -1t))
 configs=$(printf ":%s" "${configs_array[@]}")
 KUBECONFIG="${KUBECONFIG}${configs}"
 export KUBECONFIG
