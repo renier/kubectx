@@ -11,6 +11,8 @@ configs_array=($(find ~/.bluemix/plugins/container-service -name "*.yml" | xargs
 configs=$(printf ":%s" "${configs_array[@]}")
 KUBECONFIG="${KUBECONFIG}${configs}"
 export KUBECONFIG
+unset configs_array
+unset configs
 
 # set context from $1
 if [ -n "${1}" ]; then
