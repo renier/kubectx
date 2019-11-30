@@ -55,3 +55,7 @@ $ ibmcloud ks cluster-config <context name> # requires the container-service ibm
 $ source kubectx # To cache it
 $ kubectx <context name> # To set it
 ```
+
+## iTerm2 Mac users
+
+There is a `kubectx.py` python script that adds the current kube context with current namespace to the terminal status bar. You can add it from the script menu. Once you install it, you can add it to the status bar using an interpolated string applet with `\(user.kubectx)` as the value.
