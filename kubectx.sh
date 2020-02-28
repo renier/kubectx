@@ -25,7 +25,7 @@ if [ -n "${2}" ]; then
 fi
 
 # show context map at the end
-if [ $# -eq 0 ] || [ $# -eq 2 ]; then
+if [ $# -eq 0 ] || [ $# -eq 2 ] && [ -z "$KUBECTX_SILENT" ]; then
     FORMAT="%-1s %-30s %-20s %-15s"
     printf "$FORMAT\n" " " "NAME" "USER" "NAMESPACE"
     kubectl config get-contexts --no-headers | sed -E 's|/[a-zA-Z0-9]+||g' | sed -e 's|^ |-|g' | while IFS='$\n' read -r line; do
