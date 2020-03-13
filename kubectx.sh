@@ -26,14 +26,13 @@ fi
 
 # show context map at the end
 if [ $# -eq 0 ] || [ $# -eq 2 ] && [ -z "$KUBECTX_SILENT" ]; then
-    FORMAT="%-1s %-30s %-20s %-15s"
-    printf "$FORMAT\n" " " "NAME" "USER" "NAMESPACE"
+    FORMAT="%-1s %-30s %-15s"
+    printf "$FORMAT\n" " " "NAME" "NAMESPACE"
     kubectl config get-contexts --no-headers | sed -E 's|/[a-zA-Z0-9]+||g' | sed -e 's|^ |-|g' | while IFS='$\n' read -r line; do
         current=$(echo "$line" | awk '{print $1}')
         [ "$current" != "*" ] && current=" "
         cluster=$(echo "$line" | awk '{print $2}')
-        user=$(echo "$line" | awk '{print $4}')
         namespace=$(echo "$line" | awk '{print $5}')
-        printf "$FORMAT\n" "$current" "$cluster" "$user" "$namespace"
+        printf "$FORMAT\n" "$current" "$cluster" "$namespace"
     done
 fi
