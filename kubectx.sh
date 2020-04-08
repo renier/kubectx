@@ -15,17 +15,22 @@ unset configs_array
 unset configs
 
 # set context from $1
-if [ -n "${1}" ]; then
+if [ -n "${1}" ] && [ "${1}" != "." ]; then
     kubectl config use-context "${1}"
+else
+    echo "Current context is \"$(kubectl config current-context)\"."
 fi
 
 # set namespace from $2
 if [ -n "${2}" ]; then
-    kubectl config set-context --current --namespace="${2}"
+    kubectl config set-context --current --namespace="${2}" > /dev/null
+    echo "Namespace \"${2}\" set."
+else
+    echo "Current namespace is \"$(kubectl config get-contexts $(kubectl config current-context) --no-headers | awk '{print $5}')\"."
 fi
 
 # show context map at the end
-if [ $# -eq 0 ] || [ $# -eq 2 ] && [ -z "$KUBECTX_SILENT" ]; then
+if [ $# -eq 0 ] && [ -z "$KUBECTX_SILENT" ]; then
     FORMAT="%-1s %-30s %-15s"
     printf "$FORMAT\n" " " "NAME" "NAMESPACE"
     kubectl config get-contexts --no-headers | sed -E 's|/[a-zA-Z0-9]+||g' | sed -e 's|^ |-|g' | while IFS='$\n' read -r line; do
