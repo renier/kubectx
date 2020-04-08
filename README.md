@@ -28,7 +28,12 @@ It also supports setting the namespace:
 $ kubectx <context name> <namespace>
 ```
 
-To see the context table:
+To only set the namespace in the current context:
+```
+$ kubectx . <namespace>
+```
+
+To see the contexts table:
 ```
 kubectx
 ```
