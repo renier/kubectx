@@ -17,7 +17,7 @@ unset configs
 # set context from $1
 if [ -n "${1}" ] && [ "${1}" != "." ]; then
     kubectl config use-context "${1}"
-else
+elif [ -z "$KUBECTX_SILENT" ]; then
     echo "Current context is \"$(kubectl config current-context)\"."
 fi
 
@@ -25,7 +25,7 @@ fi
 if [ -n "${2}" ]; then
     kubectl config set-context --current --namespace="${2}" > /dev/null
     echo "Namespace \"${2}\" was set."
-else
+elif [ -z "$KUBECTX_SILENT" ]; then
     echo "Current namespace is \"$(kubectl config get-contexts $(kubectl config current-context) --no-headers | awk '{print $5}')\"."
 fi
 
