@@ -5,15 +5,6 @@ if [ "${1}" == "compgen" ]; then
     exit 0
 fi
 
-# set KUBECONFIG paths
-KUBECONFIG=~/.kube/config
-configs_array=($(find ~/.bluemix/plugins/container-service -name "*.yml" | xargs ls -1t))
-configs=$(printf ":%s" "${configs_array[@]}")
-KUBECONFIG="${KUBECONFIG}${configs}"
-export KUBECONFIG
-unset configs_array
-unset configs
-
 # set context from $1
 if [ -n "${1}" ] && [ "${1}" != "." ]; then
     kubectl config use-context "${1}"
