@@ -20,7 +20,7 @@ async def main(connection):
     async def set_kubectx(conn):
         app = await iterm2.async_get_app(conn)
         process = subprocess.Popen(
-            ['/bin/bash', '-c', 'source /usr/local/bin/kubectx > /dev/null && /usr/local/bin/kubectl config view --minify --output json'], stdout=subprocess.PIPE)
+            ['/bin/bash', '-c', '/usr/local/bin/kubectl config view --minify --output json'], stdout=subprocess.PIPE)
         output, error = process.communicate()
 
         decoded = output.decode('utf-8')

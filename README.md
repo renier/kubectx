@@ -12,11 +12,10 @@ $ cp kubectx.sh /usr/local/bin/kubectx
 
 # using
 
-To cache all existing IBM Cloud Kubernetes configs:
+To see the contexts table:
 ```
-$ source kubectx > /dev/null
+kubectx
 ```
-You should also add this command to your `~/.bash_profile` (or `~/.bashrc` on Unix/Linux).
 
 That's it. To switch to any of the cached contexts:
 ```
@@ -31,11 +30,6 @@ $ kubectx <context name> <namespace>
 To only set the namespace in the current context:
 ```
 $ kubectx . <namespace>
-```
-
-To see the contexts table:
-```
-kubectx
 ```
 
 ## Bash completion
@@ -56,9 +50,8 @@ Now try it: `kubectx <TAB><TAB>`. 🎉
 
 To install a brand new IBM Cloud Kubernetes context (assuming you are already logged in to IBM Cloud):
 ```
-$ ibmcloud ks cluster-config <context name> # requires the container-service ibmcloud plugin
-$ source kubectx # To cache it
-$ kubectx <context name> # To set it
+$ iksconfig <cluster name> # requires the container-service ibmcloud plugin
+$ kubectx # to see that it is already set as your context
 ```
 
 ## iTerm2 Mac users
