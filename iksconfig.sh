@@ -1,14 +1,31 @@
 #!/bin/bash
 orig_ns=$(kubectl config get-contexts --no-headers | grep "${1} " | grep -oE '[^ ]+$')
 set -eo pipefail
-cluster_name="$1"
-ibmcloud ks cluster config --cluster "$cluster_name"
-cluster_id=$(ibmcloud ks cluster get --cluster "$cluster_name" --json -s | grep '"id"' | cut -d '"' -f 4)
-set --
-kubectl config delete-context "${cluster_name}" > /dev/null 2>&1 || true
-set -eo pipefail
-kubectl config rename-context "${cluster_name}"/${cluster_id} "${cluster_name}"
-kubectl config use-context "$cluster_name"
-namespace=default
-[ -n "$orig_ns" ] && namespace="$orig_ns"
-kubectl config set-context --current --namespace="$namespace"
+cluster_name="${1}"
+
+if [ -z "${cluster_name}" ]; then
+	echo "Getting the clusters you have access to..."
+	NAMES=($(ibmcloud ks cluster ls -q | awk '{print $1}'))
+
+	[ -z "$NAMES" ] && echo "No clusters found" && exit 1
+
+	echo
+	echo "Choose the cluster you want to log in to:"
+	i=0
+	for name in ${NAMES[@]}; do
+		i=$((i+1))
+		echo "${i}. $name"
+	done
+	read p
+
+  p=$((p-1))
+  cluster_name="${NAMES[$p]}"
+fi
+
+echo "Logging into the $cluster_name cluster..."
+ibmcloud ks cluster config -c $cluster_name --admin || exit 1
+
+ctx=$(kubectl config current-context)
+kubectl config delete-context "${cluster_name}"
+kubectl config rename-context "${ctx}" "${cluster_name}"
+echo "Done."
