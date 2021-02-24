@@ -26,6 +26,8 @@ echo "Logging into the $cluster_name cluster..."
 ibmcloud ks cluster config -c $cluster_name --admin || exit 1
 
 ctx=$(kubectl config current-context)
+set --
 kubectl config delete-context "${cluster_name}"
+set -eo pipefail
 kubectl config rename-context "${ctx}" "${cluster_name}"
 echo "Done."
