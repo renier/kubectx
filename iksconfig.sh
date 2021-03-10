@@ -1,5 +1,7 @@
 #!/bin/bash
 orig_ns=$(kubectl config get-contexts --no-headers | grep "${1} " | grep -oE '[^ ]+$')
+orig_ctx=$(kubectl config current-context)
+
 set -eo pipefail
 cluster_name="${1}"
 
@@ -30,4 +32,10 @@ set +e
 kubectl config delete-context "${cluster_name}" 2> /dev/null
 set -eo pipefail
 kubectl config rename-context "${ctx}" "${cluster_name}"
+# recover/set expected namespace
+if [ -n "${2}" ]; then
+	kubectl config set-context --current --namespace="${2}" > /dev/null
+elif [ "${cluster_name}" = "${orig_ctx}" ]; then
+	kubectl config set-context --current --namespace="${orig_ns}" > /dev/null
+fi
 echo "Done."
