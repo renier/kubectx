@@ -25,7 +25,10 @@ if [ -z "${cluster_name}" ]; then
 fi
 
 echo "Logging into the $cluster_name cluster..."
-ibmcloud ks cluster config -c $cluster_name --admin || exit 1
+if ibmcloud ks cluster get -c $cluster_name --output json | grep '"openshift"'; then
+	admin_opt="--admin"
+fi
+ibmcloud ks cluster config -c $cluster_name ${admin_opt} || exit 1
 
 ctx=$(kubectl config current-context)
 set +e
