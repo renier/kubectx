@@ -17,7 +17,7 @@ if [ -n "${2}" ]; then
     kubectl config set-context --current --namespace="${2}" > /dev/null
     echo "Namespace \"${2}\" was set."
 else
-    echo "Current namespace is \"$(kubectl config get-contexts $(kubectl config current-context) --no-headers | awk '{print $5}')\"."
+	echo "Current namespace is \"$(kubectl config view --minify --output 'jsonpath={..namespace}')\"."
 fi
 
 # show context map at the end

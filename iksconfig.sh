@@ -1,5 +1,5 @@
 #!/bin/bash
-orig_ns=$(kubectl config get-contexts --no-headers | grep "${1} " | grep -oE '[^ ]+$')
+orig_ns=$(kubectl config view --minify --output 'jsonpath={..namespace}')
 orig_ctx=$(kubectl config current-context)
 
 set -eo pipefail
@@ -25,7 +25,8 @@ if [ -z "${cluster_name}" ]; then
 fi
 
 echo "Logging into the $cluster_name cluster..."
-if ibmcloud ks cluster get -c $cluster_name --output json | grep '"openshift"'; then
+cluster_info="$(ibmcloud ks cluster get -c $cluster_name --output json)"
+if echo "${cluster_info}" | grep '"openshift"'; then
 	admin_opt="--admin"
 fi
 ibmcloud ks cluster config -c $cluster_name ${admin_opt} || exit 1

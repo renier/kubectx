@@ -1,0 +1,11 @@
+#!/bin/bash
+
+function _iksconfig_bash_autocomplete() {
+    local cur
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+
+    COMPREPLY=($(compgen -W "$(ibmcloud ks cluster ls -q | awk '{print $1}' | sed '1d')" -- $cur))
+}
+
+complete -F _iksconfig_bash_autocomplete iksconfig
